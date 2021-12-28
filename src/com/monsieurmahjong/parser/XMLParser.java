@@ -2,7 +2,6 @@ package com.monsieurmahjong.parser;
 
 import java.io.File;
 
-import com.monsieurmahjong.parser.model.Node;
 import com.monsieurmahjong.parser.model.Tree;
 
 public class XMLParser
@@ -19,9 +18,13 @@ public class XMLParser
     {
         tree = new Tree();
 
-        // read file
+        FileReader.getLinesFromFile(file).forEach(this::interpretLine);
 
-        tree.addElementAtRoot(new Node());
         return tree;
+    }
+
+    public void interpretLine(String line)
+    {
+        // TODO implement this
     }
 }
