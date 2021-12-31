@@ -1,6 +1,7 @@
 package com.monsieurmahjong.parser;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import org.junit.jupiter.api.Test;
 
@@ -12,6 +13,12 @@ public class XMLParserTest
         XMLParser parser = new XMLParser(null);
         boolean ignoreWhitespaces = parser.ignoreWhitespaces();
         assertTrue(ignoreWhitespaces, "XML ignores whitespaces");
+    }
+
+    @Test
+    public void failingTest()
+    {
+        fail();
     }
 
 //    @Test
