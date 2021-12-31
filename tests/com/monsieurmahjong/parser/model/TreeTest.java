@@ -49,4 +49,16 @@ public class TreeTest
 
         assertTrue(treeHasNode, "Tree should have the node leaf");
     }
+
+    @Test
+    public void tree_withJustARoot_ShouldFindNodeRoot()
+    {
+        Node root = new Node("root");
+        Tree tree = new Tree();
+        tree.addElementAtRoot(root);
+
+        boolean treeHasNode = tree.hasNodeWithValue("root");
+
+        assertTrue(treeHasNode, "Tree should have the node root");
+    }
 }

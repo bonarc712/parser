@@ -1,7 +1,19 @@
 package com.monsieurmahjong.parser;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
+
 public class XMLParserTest
 {
+    @Test
+    public void xmlfiles_ignoreWhitespaces()
+    {
+        XMLParser parser = new XMLParser(null);
+        boolean ignoreWhitespaces = parser.ignoreWhitespaces();
+        assertTrue(ignoreWhitespaces, "XML ignores whitespaces");
+    }
+
 //    @Test
 //    public void xmlDocument_withRootRootAsRoot_shouldHaveRootRoot()
 //    {

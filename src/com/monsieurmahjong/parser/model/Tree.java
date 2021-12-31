@@ -21,19 +21,23 @@ public class Tree
     public List<Node> getFlatListOfNodes()
     {
         return rootList.stream() //
-                .flatMap(node -> getFlatListOfNodesUsingRoot(node).stream()) //
+                .flatMap(node -> getFlatListOfNodesUsingParent(node).stream()) //
                 .collect(Collectors.toList());
     }
 
-    public List<Node> getFlatListOfNodesUsingRoot(Node root)
+    public List<Node> getFlatListOfNodesUsingParent(Node node)
     {
         List<Node> toReturn = new ArrayList<>();
-        for (Node node : root.getChildNodes())
+        toReturn.add(node);
+        for (Node childNode : node.getChildNodes())
         {
-            toReturn.add(node);
-            if (node.hasChildNodes())
+            if (childNode.hasChildNodes())
             {
-                toReturn.addAll(getFlatListOfNodesUsingRoot(node));
+                toReturn.addAll(getFlatListOfNodesUsingParent(childNode));
+            }
+            else
+            {
+                toReturn.add(childNode);
             }
         }
         return toReturn;
@@ -41,6 +45,14 @@ public class Tree
 
     public boolean hasNodeWithValue(String value)
     {
-        return getFlatListOfNodes().stream().filter(node -> node.getValue() == value).findAny().isPresent();
+        return getFlatListOfNodes().stream().filter(node -> value.equals(node.getValue())).findAny().isPresent();
+    }
+
+    @Override
+    public String toString()
+    {
+        StringBuilder builder = new StringBuilder();
+        getFlatListOfNodes().forEach(node -> builder.append(node + "\n"));
+        return builder.toString();
     }
 }

@@ -10,6 +10,8 @@ public class Node
     private List<String> attributes;
     private List<Node> childNodes;
 
+    private Node parent;
+
     public Node()
     {
         childNodes = new ArrayList<>();
@@ -35,6 +37,7 @@ public class Node
     public void addChild(Node child)
     {
         childNodes.add(child);
+        child.setParent(this);
     }
 
     public List<Node> getChildNodes()
@@ -47,6 +50,21 @@ public class Node
         return !childNodes.isEmpty();
     }
 
+    public Node getParent()
+    {
+        return parent;
+    }
+
+    private void setParent(Node parent)
+    {
+        this.parent = parent;
+    }
+
+    public boolean isRoot()
+    {
+        return parent == null;
+    }
+
     public void addAttribute(String attribute)
     {
         attributes.add(attribute);
@@ -55,5 +73,11 @@ public class Node
     public List<String> getAttributes()
     {
         return attributes;
+    }
+
+    @Override
+    public String toString()
+    {
+        return value;
     }
 }
