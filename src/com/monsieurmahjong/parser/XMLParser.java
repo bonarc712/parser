@@ -2,6 +2,7 @@ package com.monsieurmahjong.parser;
 
 import java.io.File;
 
+import com.monsieurmahjong.parser.exception.InvalidSyntaxException;
 import com.monsieurmahjong.parser.model.Node;
 import com.monsieurmahjong.parser.model.Tree;
 
@@ -40,7 +41,11 @@ public class XMLParser implements Parser
         char firstCharacter = line.charAt(0);
         if (isSpecialCharacter(firstCharacter))
         {
-            if (line.startsWith("<"))
+            if (line.startsWith("</"))
+            {
+                line = readNodeEnd(line);
+            }
+            else if (line.startsWith("<"))
             {
                 line = readNode(line);
             }
@@ -70,6 +75,17 @@ public class XMLParser implements Parser
         addCurrentNodeToTheTree(leafNode);
 
         return line.substring(subStringEnd);
+    }
+
+    private String readNodeEnd(String line)
+    {
+        String element = line.substring(line.indexOf("<") + 2, line.indexOf(">"));
+        if (!element.equals(currentInterpretedNode.getValue()))
+        {
+            throw new InvalidSyntaxException();
+        }
+        currentInterpretedNode = currentInterpretedNode.getParent();
+        return line.substring(line.indexOf(">") + 1);
     }
 
     private String readNode(String line)

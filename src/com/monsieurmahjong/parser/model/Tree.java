@@ -3,6 +3,7 @@ package com.monsieurmahjong.parser.model;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Tree
 {
@@ -43,9 +44,19 @@ public class Tree
         return toReturn;
     }
 
+    private Stream<Node> getStreamOfNodesWithValue(String value)
+    {
+        return getFlatListOfNodes().stream().filter(node -> value.equals(node.getValue()));
+    }
+
     public boolean hasNodeWithValue(String value)
     {
-        return getFlatListOfNodes().stream().filter(node -> value.equals(node.getValue())).findAny().isPresent();
+        return getStreamOfNodesWithValue(value).findAny().isPresent();
+    }
+
+    public List<Node> getNodesWithValue(String value)
+    {
+        return getStreamOfNodesWithValue(value).collect(Collectors.toList());
     }
 
     @Override

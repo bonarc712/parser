@@ -78,6 +78,12 @@ public class Node
     @Override
     public String toString()
     {
-        return value;
+        StringBuilder nodeString = new StringBuilder();
+        nodeString.append(value);
+        if (parent != null)
+        {
+            nodeString.append(" (parent: " + parent.getValue() + ")");
+        }
+        return nodeString.toString();
     }
 }

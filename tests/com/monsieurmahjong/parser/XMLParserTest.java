@@ -1,11 +1,13 @@
 package com.monsieurmahjong.parser;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 
 import org.junit.jupiter.api.Test;
 
+import com.monsieurmahjong.parser.model.Node;
 import com.monsieurmahjong.parser.model.Tree;
 
 public class XMLParserTest
@@ -52,5 +54,29 @@ public class XMLParserTest
         boolean hasNode = parsedTree.hasNodeWithValue("color");
 
         assertTrue(hasNode, "Document with a leaf named color should have it present");
+    }
+
+    @Test
+    public void xmlNodeRegular_withParentPrevent_shouldHavePreventAsParent()
+    {
+        File randomXMLDocument = new File("resources/randomXML1.xml");
+        Parser parser = new XMLParser(randomXMLDocument);
+
+        Tree parsedTree = parser.parse();
+
+        Node regularNode = parsedTree.getNodesWithValue("regular").get(0);
+        Node regularNodeParent = regularNode.getParent();
+        assertEquals("prevent", regularNodeParent.getValue(), "Node regular should have parent prevent");
+    }
+
+    @Test
+    public void xmlFile_withFiftySevenNodes_shouldHaveThatMuch()
+    {
+        File randomXMLDocument = new File("resources/randomXML2.xml");
+        Parser parser = new XMLParser(randomXMLDocument);
+
+        Tree parsedTree = parser.parse();
+
+        assertEquals(57, parsedTree.getFlatListOfNodes().size(), "RandomXML2 tree should have 57 elements");
     }
 }
