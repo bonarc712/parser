@@ -1,12 +1,15 @@
 package com.monsieurmahjong.parser;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 
 import org.junit.jupiter.api.Test;
 
+import com.monsieurmahjong.parser.exception.InvalidSyntaxException;
 import com.monsieurmahjong.parser.model.Node;
 import com.monsieurmahjong.parser.model.Tree;
 
@@ -78,5 +81,25 @@ public class XMLParserTest
         Tree parsedTree = parser.parse();
 
         assertEquals(57, parsedTree.getFlatListOfNodes().size(), "RandomXML2 tree should have 57 elements");
+    }
+
+    @Test
+    public void closingBracket_inXMLFile_shouldNotIncludeTheDash()
+    {
+        File xmlWithClosingBracket = new File("resources/xmlWithClosingBracket.xml");
+        Parser parser = new XMLParser(xmlWithClosingBracket);
+
+        Tree tree = parser.parse();
+
+        assertFalse(tree.getNodesWithValue("prevent").isEmpty(), "A node named prevent should be present");
+    }
+
+    @Test
+    public void xmlFile_withBadSyntax_ShouldThrowException()
+    {
+        File badSyntaxFile = new File("resources/badSyntaxXM-L.txt");
+        Parser parser = new XMLParser(badSyntaxFile);
+
+        assertThrows(InvalidSyntaxException.class, () -> parser.parse());
     }
 }

@@ -90,11 +90,16 @@ public class XMLParser implements Parser
 
     private String readNode(String line)
     {
-        String element = line.substring(line.indexOf("<") + 1, line.indexOf(">"));
+        boolean nodeWithClosingBracket = line.contains("/>");
+        int lastIndexOfSubstring = nodeWithClosingBracket ? line.indexOf("/") : line.indexOf(">");
+        String element = line.substring(line.indexOf("<") + 1, lastIndexOfSubstring);
+        element = element.trim();
         Node currentNode = new Node(element);
         addCurrentNodeToTheTree(currentNode);
-        currentInterpretedNode = currentNode;
-
+        if (!nodeWithClosingBracket)
+        {
+            currentInterpretedNode = currentNode;
+        }
         return line.substring(line.indexOf(">") + 1);
     }
 
