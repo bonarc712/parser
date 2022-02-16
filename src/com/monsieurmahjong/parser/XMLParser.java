@@ -3,8 +3,7 @@ package com.monsieurmahjong.parser;
 import java.io.File;
 
 import com.monsieurmahjong.parser.exception.InvalidSyntaxException;
-import com.monsieurmahjong.parser.model.Node;
-import com.monsieurmahjong.parser.model.Tree;
+import com.monsieurmahjong.parser.model.*;
 
 public class XMLParser implements Parser
 {
@@ -90,12 +89,45 @@ public class XMLParser implements Parser
 
     private String readNode(String line)
     {
-        boolean nodeWithClosingBracket = line.contains("/>");
-        int lastIndexOfSubstring = nodeWithClosingBracket ? line.indexOf("/") : line.indexOf(">");
-        String element = line.substring(line.indexOf("<") + 1, lastIndexOfSubstring);
+        // remove first character
+        line = line.substring(1);
+
+        int indexOfFirstSpecialCharacter = getFirstSpecialCharacterIndexInLine(line);
+        String element = line.substring(0, indexOfFirstSpecialCharacter);
         element = element.trim();
         Node currentNode = new Node(element);
         addCurrentNodeToTheTree(currentNode);
+
+        System.out.println(currentNode);
+
+        // parse attributes
+        // read attribute
+
+        line = line.substring(indexOfFirstSpecialCharacter);
+        line = line.trim();
+
+        while (!isSpecialCharacter(line.charAt(0)))
+        {
+            // attribute start
+            String attributeKey = line.substring(0, line.indexOf('='));
+
+            line = line.substring(line.indexOf('"') + 1);
+            String attributeValue = line.substring(0, line.indexOf('"'));
+            line = line.substring(line.indexOf('"') + 1);
+
+            Attribute attribute = new Attribute(attributeKey, attributeValue);
+            System.out.println(attribute);
+            currentNode.addAttribute(attribute);
+
+            line = line.trim();
+        }
+
+        return readEndOfCurrentNode(line, currentNode);
+    }
+
+    private String readEndOfCurrentNode(String line, Node currentNode)
+    {
+        boolean nodeWithClosingBracket = line.contains("/>");
         if (!nodeWithClosingBracket)
         {
             currentInterpretedNode = currentNode;
@@ -103,9 +135,24 @@ public class XMLParser implements Parser
         return line.substring(line.indexOf(">") + 1);
     }
 
+    private int getFirstSpecialCharacterIndexInLine(String line)
+    {
+        for (int i = 0; i < line.length(); i++)
+        {
+            if (isSpecialCharacter(line.charAt(i)))
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
+
     private boolean isSpecialCharacter(char character)
     {
-        return character == '<';
+        return character == '<' //
+                || character == ' ' //
+                || character == '>' //
+                || character == '/';
     }
 
     private void addCurrentNodeToTheTree(Node currentNode)

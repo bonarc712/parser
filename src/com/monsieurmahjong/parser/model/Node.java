@@ -1,13 +1,12 @@
 package com.monsieurmahjong.parser.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Node
 {
     private String value;
 
-    private List<String> attributes;
+    private List<Attribute> attributes;
     private List<Node> childNodes;
 
     private Node parent;
@@ -65,12 +64,12 @@ public class Node
         return parent == null;
     }
 
-    public void addAttribute(String attribute)
+    public void addAttribute(Attribute attribute)
     {
         attributes.add(attribute);
     }
 
-    public List<String> getAttributes()
+    public List<Attribute> getAttributes()
     {
         return attributes;
     }

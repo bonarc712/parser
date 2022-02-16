@@ -1,17 +1,13 @@
 package com.monsieurmahjong.parser;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
 
 import org.junit.jupiter.api.Test;
 
 import com.monsieurmahjong.parser.exception.InvalidSyntaxException;
-import com.monsieurmahjong.parser.model.Node;
-import com.monsieurmahjong.parser.model.Tree;
+import com.monsieurmahjong.parser.model.*;
 
 public class XMLParserTest
 {
@@ -101,5 +97,20 @@ public class XMLParserTest
         Parser parser = new XMLParser(badSyntaxFile);
 
         assertThrows(InvalidSyntaxException.class, () -> parser.parse());
+    }
+
+    @Test
+    public void xmlFile_withAttributes_ShouldIncludeAttributes()
+    {
+        File fileWithAttributes = new File("resources/xmlWithAttributes.xml");
+        Parser parser = new XMLParser(fileWithAttributes);
+
+        System.out.println("Start attributes");
+        Tree parsedTree = parser.parse();
+
+        Node libraryNode = parsedTree.getNodesWithValue("library").get(0);
+        Attribute attribute = libraryNode.getAttributes().get(0);
+        assertEquals("worth", attribute.getKey(), "Attribute worth key should be worth");
+        assertEquals("without", attribute.getValue(), "Attribute worth value should be without");
     }
 }

@@ -24,10 +24,10 @@ public class NodeTest
     public void aNode_canHave_attributes()
     {
         Node node = new Node();
-        node.addAttribute("test");
+        node.addAttribute(new Attribute("test", "testValue"));
 
-        List<String> attributes = node.getAttributes();
+        List<Attribute> attributes = node.getAttributes();
 
-        assertTrue(attributes.contains("test"), "Attribute should be created and added");
+        assertTrue(attributes.stream().anyMatch(attribute -> attribute.getKey().equals("test")), "Attribute should be created and added");
     }
 }
