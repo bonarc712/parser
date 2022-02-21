@@ -105,12 +105,28 @@ public class XMLParserTest
         File fileWithAttributes = new File("resources/xmlWithAttributes.xml");
         Parser parser = new XMLParser(fileWithAttributes);
 
-        System.out.println("Start attributes");
         Tree parsedTree = parser.parse();
 
         Node libraryNode = parsedTree.getNodesWithValue("library").get(0);
         Attribute attribute = libraryNode.getAttributes().get(0);
         assertEquals("worth", attribute.getKey(), "Attribute worth key should be worth");
         assertEquals("without", attribute.getValue(), "Attribute worth value should be without");
+    }
+
+    @Test
+    public void xmlTag_withTwoAttributes_ShouldHaveBoth()
+    {
+        File fileWithAttributes = new File("resources/xmlWithAttributes.xml");
+        Parser parser = new XMLParser(fileWithAttributes);
+
+        Tree parsedTree = parser.parse();
+
+        Node indeedNode = parsedTree.getNodesWithValue("indeed").get(0);
+        Attribute firstAttribute = indeedNode.getAttributes().get(0);
+        Attribute secondAttribute = indeedNode.getAttributes().get(1);
+        assertEquals("tired", firstAttribute.getKey(), "Attribute tired key should be tired");
+        assertEquals("care", firstAttribute.getValue(), "Attribute tired value should be care");
+        assertEquals("bob", secondAttribute.getKey(), "Attribute bob key should be bob");
+        assertEquals("ross", secondAttribute.getValue(), "Attribute bob value should be ross");
     }
 }
